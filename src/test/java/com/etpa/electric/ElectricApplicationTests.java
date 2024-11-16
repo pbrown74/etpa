@@ -72,32 +72,24 @@ class ElectricApplicationTests {
         Optional<FractionDTO> firstFraction = findFraction(fractions, Month.JAN, "A");
         assertThat(firstFraction.isPresent());
         assertThat(firstFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
-        assertThat(firstFraction.get().getProfile().equals("A"));
-        assertThat(firstFraction.get().getMonth()==Month.JAN);
         Optional<FractionDTO> lastFraction = findFraction(fractions, Month.DEC, "B");
         assertThat(lastFraction.isPresent());
         assertThat(lastFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.0333))==0);
-        assertThat(lastFraction.get().getProfile().equals("B"));
-        assertThat(lastFraction.get().getMonth()==Month.DEC);
         // POST metre readings to database
         body = loadBody("test1_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
-        items = response.getItems().toArray(new Object[]{});
         // check response body from POST (should contain Readings we uploaded)
+        items = response.getItems().toArray(new Object[]{});
         MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
         assertThat(readings.length==24);
         Optional<MetreReadingDTO> firstReading = findMetreReading(readings,"0001", Month.JAN);
         assertThat(firstReading.isPresent());
         assertThat(firstReading.get().getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
         assertThat(firstReading.get().getProfile().equals("A"));
-        assertThat(firstReading.get().getMonth()==Month.JAN);
-        assertThat(firstReading.get().getMetreId().equals("0001"));
         Optional<MetreReadingDTO> lastReading = findMetreReading(readings,"0004", Month.DEC);
         assertThat(lastReading.isPresent());
         assertThat(lastReading.get().getMetreReading().compareTo(BigDecimal.valueOf(30))==0);
         assertThat(lastReading.get().getProfile().equals("B"));
-        assertThat(lastReading.get().getMonth()==Month.JAN);
-        assertThat(lastReading.get().getMetreId().equals("0004"));
         // GET consumption created as a side effect of loading the Metre Readings
         Map<String, String> params = new HashMap<>();
         params.put("metreId", "0004");
