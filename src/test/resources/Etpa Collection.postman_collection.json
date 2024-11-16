@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "331a49b6-062d-4433-a726-57011f7edef6",
+		"name": "Etpa Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26805553",
+		"_collection_link": "https://blue-sunset-993581.postman.co/workspace/Spring-Boot-REST-API-Workspace~4a204aee-1760-4b3e-b299-19357482c27b/collection/26805553-331a49b6-062d-4433-a726-57011f7edef6?action=share&source=collection_link&creator=26805553"
+	},
+	"item": [
+		{
+			"name": "Insert Fractions file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/User/IdeaProjects/etpa/src/main/resources/fractions.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/fractions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"fractions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Readings file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/User/IdeaProjects/etpa/src/main/resources/readings.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/metrereadings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"metrereadings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Select Consumption",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/User/IdeaProjects/etpa/src/main/resources/readings.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/consumption/:month/:metre_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"consumption",
+						":month",
+						":metre_id"
+					],
+					"variable": [
+						{
+							"key": "month",
+							"value": "DEC"
+						},
+						{
+							"key": "metre_id",
+							"value": "0004"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Consumption",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"metre_id\": \"0001\",\r\n            \"profile\": \"A\",\r\n            \"month\": \"DEC\",\r\n            \"consumption\": 1.00\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/consumption",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"consumption"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Fraction",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"eb5728d0-5e82-4308-8c80-47e665ceaf7f\",\r\n    \"month\": \"JAN\",\r\n    \"profile\": \"A\",\r\n    \"fraction\": 0.3225\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/fractions/:fraction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"fractions",
+						":fraction"
+					],
+					"variable": [
+						{
+							"key": "fraction",
+							"value": "eb5728d0-5e82-4308-8c80-47e665ceaf7f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Metre Reading",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"metre_id\": \"0004\",\r\n    \"profile\": \"B\",\r\n    \"month\": \"JAN\",\r\n    \"metre_reading\": 8.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/metrereadings/:metrereading",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"metrereadings",
+						":metrereading"
+					],
+					"variable": [
+						{
+							"key": "metrereading",
+							"value": "25b88393-704e-4a6c-a4f5-9e0f703d5c60"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
