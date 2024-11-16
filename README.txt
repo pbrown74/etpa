@@ -17,7 +17,7 @@ to start MySQL, Docker does.
 
 I used a generic response JSON structure to handle the errors when uploading a
 multi line file. Here is a truncated example of the JSON you will see as a
-response to a a file upload:
+response to a fraction file upload (the metre readings upload is same struct):
 
 {
     "items": [
@@ -48,6 +48,18 @@ in the "errors" section. Note that the HTTP status code here would be 200,
 even though we have a validation error. Note the error code, this is an
 application level error - i have enumerated the validation errors in a
 class called Errors. For more serious errors we use HTTP status codes.
+
+A consumption is added during uploading of the metre readings and
+can be retrieved, the JSON looks like this:
+
+{
+    "metre_id": "0004",
+    "month": "DEC",
+    "profile": "B",
+    "consumption": 1.00,
+    "id": "e7798915-6ba0-46fa-b4bf-e9643250a463"
+}
+
 
 The validations are found in the service layers (in the service package).
 
@@ -83,6 +95,11 @@ To run the app in Docker:
       docker compose up
           -- now the service is running on localhost:9999 and you can use
           postman test cases (included in resources/) or use Swagger to test
+
+The main endpoints:
+  http://localhost:9999/etpa/fractions
+  http://localhost:9999/etpa/metrereadings
+  http://localhost:9999/etpa/consumption/:month/:metre_id
 
 3) Documentation:
 
