@@ -150,8 +150,9 @@ You should not have to edit anything to get it running locally on port 9999.
 
 I should use the business key from the Fraction file (month, profile) as the
 primary key for doing insert/update/delete. The same concept applies to the
-Metre Reading file, they business key is (metreId,month,profile)..the foreign
-key from MetreReading to fraction is (month,profile).
+Metre Reading file, the business key is (metreId,month,profile). The foreign
+key from MetreReading to Fraction could be (month,profile), although i'm not
+sure that is desirable.
 
 If i do this then i can implement CRUD using the CSV file in all the
 endpoints. POST would fail if you try and insert the same business key twice.
