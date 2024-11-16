@@ -62,38 +62,48 @@ class ElectricApplicationTests {
     @Test
     @Order(1)
     public void insert_Fractions_And_Readings_Then_Check_Consumption() throws IOException {
+        // POST fractions to database
         MultiValueMap<String, Object> body = loadBody("test1_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
+        // check response body from POST (should contain Fractions we uploaded)
         Object[] items = response.getItems().toArray(new Object[]{});
         FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
         assertThat(fractions.length==24);
-        FractionDTO firstFraction = fractions[0];
-        assertThat(firstFraction.getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
-        assertThat(firstFraction.getProfile().equals("A"));
-        assertThat(firstFraction.getMonth().compareTo(Month.JAN)==0);
-        FractionDTO lastFraction = fractions[23];
-        assertThat(lastFraction.getFraction().compareTo(BigDecimal.valueOf(0.0333))==0);
-        assertThat(lastFraction.getProfile().equals("B"));
-        assertThat(lastFraction.getMonth().compareTo(Month.DEC)==0);
+        Optional<FractionDTO> firstFraction = findFraction(fractions, Month.JAN, "A");
+        assertThat(firstFraction.isPresent());
+        assertThat(firstFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
+        assertThat(firstFraction.get().getProfile().equals("A"));
+        assertThat(firstFraction.get().getMonth()==Month.JAN);
+        Optional<FractionDTO> lastFraction = findFraction(fractions, Month.DEC, "B");
+        assertThat(lastFraction.isPresent());
+        assertThat(lastFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.0333))==0);
+        assertThat(lastFraction.get().getProfile().equals("B"));
+        assertThat(lastFraction.get().getMonth()==Month.DEC);
+        // POST metre readings to database
         body = loadBody("test1_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         items = response.getItems().toArray(new Object[]{});
+        // check response body from POST (should contain Readings we uploaded)
         MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
         assertThat(readings.length==24);
-        MetreReadingDTO firstReading = readings[0];
-        assertThat(firstReading.getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
-        assertThat(firstReading.getProfile().equals("A"));
-        assertThat(firstReading.getMonth().compareTo(Month.JAN)==0);
-        assertThat(firstReading.getMetreId().equals("0001"));
-        MetreReadingDTO lastReading = readings[23];
-        assertThat(lastReading.getMetreReading().compareTo(BigDecimal.valueOf(30))==0);
-        assertThat(lastReading.getProfile().equals("B"));
-        assertThat(lastReading.getMonth().compareTo(Month.JAN)==0);
-        assertThat(lastReading.getMetreId().equals("0004"));
+        Optional<MetreReadingDTO> firstReading = findMetreReading(readings,"0001", Month.JAN);
+        assertThat(firstReading.isPresent());
+        assertThat(firstReading.get().getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
+        assertThat(firstReading.get().getProfile().equals("A"));
+        assertThat(firstReading.get().getMonth()==Month.JAN);
+        assertThat(firstReading.get().getMetreId().equals("0001"));
+        Optional<MetreReadingDTO> lastReading = findMetreReading(readings,"0004", Month.DEC);
+        assertThat(lastReading.isPresent());
+        assertThat(lastReading.get().getMetreReading().compareTo(BigDecimal.valueOf(30))==0);
+        assertThat(lastReading.get().getProfile().equals("B"));
+        assertThat(lastReading.get().getMonth()==Month.JAN);
+        assertThat(lastReading.get().getMetreId().equals("0004"));
+        // GET consumption created as a side effect of loading the Metre Readings
         Map<String, String> params = new HashMap<>();
         params.put("metreId", "0004");
         params.put("month", Month.DEC.name());
         ConsumptionDTO consumption = doGET(GETConsumptionUrl, ConsumptionDTO.class, params);
+        // check consumption value is 1.0, as per the test data
         assertThat(consumption.getConsumption().compareTo(BigDecimal.ONE)==0);
     }
 
@@ -262,6 +272,24 @@ class ElectricApplicationTests {
 
     private String expandPort(String url) {
         return url.replace("${server.port}", this.serverPort);
+    }
+
+    private Optional<FractionDTO> findFraction(FractionDTO[] fractions, Month month, String profile){
+        for(FractionDTO dto : fractions){
+            if(dto.getMonth()==month && dto.getProfile().equals(profile)){
+                return Optional.of(dto);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<MetreReadingDTO> findMetreReading(MetreReadingDTO[] readings, String metreId, Month month){
+        for(MetreReadingDTO dto : readings){
+            if(dto.getMonth()==month && dto.getMetreId().equals(metreId)){
+                return Optional.of(dto);
+            }
+        }
+        return Optional.empty();
     }
 
 }
