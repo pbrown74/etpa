@@ -6,6 +6,7 @@ Contents:
 3) Documentation
 4) Testing
 5) Configuration
+6) TODO
 
 *******************************************************************************
 
@@ -144,6 +145,21 @@ Config files:
 You should not have to edit anything to get it running locally on port 9999.
 
 *******************************************************************************
+
+6) TODO
+
+I should use the business key from the Fraction file (month, profile) as the
+primary key for doing insert/update/delete. The same concept applies to the
+Metre Reading file, they business key is (metreId,month,profile)..the foreign
+key from MetreReading to fraction is (month,profile).
+
+If i do this then i can implement CRUD using the CSV file in all the
+endpoints. POST would fail if you try and insert the same business key twice.
+PUT would use the business key to lookup the fraction to modify. DELETE
+would use the business key of the row to know which row to delete from
+the database.
+
+
 
 Paul Brown
 November 2024
