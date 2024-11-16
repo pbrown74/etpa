@@ -101,6 +101,8 @@ The main endpoints:
   http://localhost:9999/etpa/metrereadings
   http://localhost:9999/etpa/consumption/:month/:metre_id
 
+*******************************************************************************
+
 3) Documentation:
 
 Start the app then you will find Swagger REST API documention:
