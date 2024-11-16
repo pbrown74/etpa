@@ -85,6 +85,8 @@ Implemented" exceptions.
 
 2) Build and Run
 
+Start Docker (eg. Docker Desktop on Windows)
+
 To build the app:
 
   ./mvnw clean install

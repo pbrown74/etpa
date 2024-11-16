@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * The approach here is to test via the endpoints using the Spring RestTemplate.
@@ -61,42 +61,42 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(1)
-    public void insert_Fractions_And_Readings_Then_Check_Consumption() throws IOException {
+    public void insert_Fractions_And_Readings_Then_Check_Consumption() {
         // POST fractions to database
         MultiValueMap<String, Object> body = loadBody("test1_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         // check response body from POST (should contain Fractions we uploaded)
         Object[] items = response.getItems().toArray(new Object[]{});
         FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
-        assertThat(fractions.length==24);
+        assertTrue(fractions.length==24);
         Optional<FractionDTO> firstFraction = findFraction(fractions, Month.JAN, "A");
-        assertThat(firstFraction.isPresent());
-        assertThat(firstFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
+        assertTrue(firstFraction.isPresent());
+        assertTrue(firstFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
         Optional<FractionDTO> lastFraction = findFraction(fractions, Month.DEC, "B");
-        assertThat(lastFraction.isPresent());
-        assertThat(lastFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.0333))==0);
+        assertTrue(lastFraction.isPresent());
+        assertTrue(lastFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.0333))==0);
         // POST metre readings to database
         body = loadBody("test1_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         // check response body from POST (should contain Readings we uploaded)
         items = response.getItems().toArray(new Object[]{});
         MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
-        assertThat(readings.length==24);
+        assertTrue(readings.length==24);
         Optional<MetreReadingDTO> firstReading = findMetreReading(readings,"0001", Month.JAN);
-        assertThat(firstReading.isPresent());
-        assertThat(firstReading.get().getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
-        assertThat(firstReading.get().getProfile().equals("A"));
+        assertTrue(firstReading.isPresent());
+        assertTrue(firstReading.get().getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
+        assertTrue(firstReading.get().getProfile().equals("A"));
         Optional<MetreReadingDTO> lastReading = findMetreReading(readings,"0004", Month.DEC);
-        assertThat(lastReading.isPresent());
-        assertThat(lastReading.get().getMetreReading().compareTo(BigDecimal.valueOf(30))==0);
-        assertThat(lastReading.get().getProfile().equals("B"));
+        assertTrue(lastReading.isPresent());
+        assertTrue(lastReading.get().getMetreReading().compareTo(BigDecimal.valueOf(30))==0);
+        assertTrue(lastReading.get().getProfile().equals("B"));
         // GET consumption created as a side effect of loading the Metre Readings
         Map<String, String> params = new HashMap<>();
         params.put("metreId", "0004");
         params.put("month", Month.DEC.name());
         ConsumptionDTO consumption = doGET(GETConsumptionUrl, ConsumptionDTO.class, params);
         // check consumption value is 1.0, as per the test data
-        assertThat(consumption.getConsumption().compareTo(BigDecimal.ONE)==0);
+        assertTrue(consumption.getConsumption().compareTo(BigDecimal.ONE)==0);
     }
 
     /**
@@ -105,16 +105,16 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(2)
-    public void insert_ProfileA_Fractions_Not_Sum_to_one_Then_Check_Error() throws IOException {
+    public void insert_ProfileA_Fractions_Not_Sum_to_one_Then_Check_Error() {
         MultiValueMap<String, Object> body = loadBody("test2_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         Object[] items = response.getItems().toArray(new Object[]{});
         FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
-        assertThat(fractions.length==12);
+        assertTrue(fractions.length==12);
         List<ErrorDTO> errors = response.getErrors();
-        assertThat(errors.size()==1);
+        assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
-        assertThat(error.getCode()==Errors.FRACTIONS_DONT_SUM_TO_ONE);
+        assertTrue(error.getCode()==Errors.FRACTIONS_DONT_SUM_TO_ONE);
     }
 
     /**
@@ -123,11 +123,11 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(3)
-    public void insert_Corrupted_Fractions_file_Then_Check_StatusCode() throws IOException {
+    public void insert_Corrupted_Fractions_file_Then_Check_StatusCode() {
         // POST fractions file
         MultiValueMap<String, Object> body = loadBody("test3_fractions.csv");
         HttpStatusCode sc = doPOSTVerbose(POSTFractionsUrl, body);
-        assertThat(sc.value()==400);
+        assertTrue(sc.value()==400);
     }
 
     /**
@@ -138,19 +138,19 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(4)
-    public void insert_Readings_outside_Tolerance_Then_Check_Errors() throws IOException {
+    public void insert_Readings_outside_Tolerance_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test4_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         List<FractionDTO> fractions = response.getItems();
-        assertThat(fractions.size()==24);
+        assertTrue(fractions.size()==24);
         body = loadBody("test4_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         List<MetreReadingDTO> readings = response.getItems();
-        assertThat(readings.size()==12);
+        assertTrue(readings.size()==12);
         List<ErrorDTO> errors = response.getErrors();
-        assertThat(errors.size()==1);
+        assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
-        assertThat(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
+        assertTrue(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
     }
 
     /**
@@ -159,19 +159,19 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(5)
-    public void insert_Readings_for_nonexistant_FractionProfile_Then_Check_Errors() throws IOException {
+    public void insert_Readings_for_nonexistant_FractionProfile_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test5_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         List<FractionDTO> fractions = response.getItems();
-        assertThat(fractions.size()==24);
+        assertTrue(fractions.size()==24);
         body = loadBody("test5_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         List<MetreReadingDTO> readings = response.getItems();
-        assertThat(readings.size()==0);
+        assertTrue(readings.size()==0);
         List<ErrorDTO> errors = response.getErrors();
-        assertThat(errors.size()==1);
+        assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
-        assertThat(error.getCode()==Errors.PROFILE_NONEXISTANT);
+        assertTrue(error.getCode()==Errors.PROFILE_NONEXISTANT);
     }
 
     /**
@@ -181,19 +181,19 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(6)
-    public void insert_Readings_out_of_order_Then_Check_Errors() throws IOException {
+    public void insert_Readings_out_of_order_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test6_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         List<FractionDTO> fractions = response.getItems();
-        assertThat(fractions.size() == 24);
+        assertTrue(fractions.size() == 24);
         body = loadBody("test6_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         List<MetreReadingDTO> readingItems = response.getItems();
-        assertThat(readingItems.size() == 12);
+        assertTrue(readingItems.size() == 12);
         List<ErrorDTO> errors = response.getErrors();
-        assertThat(errors.size() == 1);
+        assertTrue(errors.size() == 1);
         ErrorDTO error = errors.get(0);
-        assertThat(error.getCode()==Errors.FRACTIONS_DONT_SUM_TO_ONE);
+        assertTrue(error.getCode()==Errors.FILE_MONTHS_DECREMENT_FOR_METRE);
     }
 
     /**
@@ -203,21 +203,21 @@ class ElectricApplicationTests {
      */
     @Test
     @Order(7)
-    public void insert_Three_Readings_whith_one_faulty_Then_Check_Two_Metres_Saved() throws IOException {
+    public void insert_Three_Readings_whith_one_faulty_Then_Check_Two_Metres_Saved() {
         MultiValueMap<String, Object> body = loadBody("test7_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
         List<FractionDTO> fractions = response.getItems();
-        assertThat(fractions.size() == 24);
+        assertTrue(fractions.size() == 24);
         body = loadBody("test7_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
         Object[] items = response.getItems().toArray(new Object[]{});
         MetreReadingDTO[] readingItems = objectMapper.convertValue(items, MetreReadingDTO[].class);
-        assertThat(readingItems.length == 24);
-        Arrays.asList(readingItems).stream().forEach(r->assertThat(!r.getMetreId().equals("0004")));
+        assertTrue(readingItems.length == 24);
+        Arrays.asList(readingItems).stream().forEach(r->assertTrue(!r.getMetreId().equals("0004")));
         List<ErrorDTO> errors = response.getErrors();
-        assertThat(errors.size() == 1);
+        assertTrue(errors.size() == 1);
         ErrorDTO error = errors.get(0);
-        assertThat(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
+        assertTrue(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
     }
 
     /**

@@ -157,13 +157,15 @@ public class MetreReadingService {
      */
 
     private void validateReadingsIncrement(final List<MetreReadingDTO> readingsPerMetre){
-        List<MetreReadingDTO> copy = new Vector<>(readingsPerMetre);
+        List<BigDecimal> readings = readingsPerMetre.stream().map(rm->rm.getMetreReading()).collect(Collectors.toList());
+        List<BigDecimal> copy = new Vector<>(readings);
         // if the sort asc list is the same as the unsorted list, the values were ascending.
         // since its a small list this is acceptable. i might go for something more efficient
         // if we are dealing with large upload files and this code is called a lot.
-        Collections.sort(readingsPerMetre);
-        if(!copy.equals(readingsPerMetre)){
-            throw new ValidationException(Errors.FILE_MONTHS_DECREMENT_FOR_METRE, "Month wrong format");
+        Collections.sort(readings);
+        if(!copy.equals(readings)){
+            throw new ValidationException(Errors.FILE_MONTHS_DECREMENT_FOR_METRE,
+                    "Metre readings must increment month to month");
         }
     }
 

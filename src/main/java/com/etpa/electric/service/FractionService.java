@@ -64,7 +64,6 @@ public class FractionService {
                         toSave.stream().forEach(f->logger.debug("Month: " + f.getMonth() +
                                 ", fraction: " + f.getFraction().toString()));
                     }
-                    items.addAll(items);
                 }
                 catch(ValidationException e){
                     String err = "Skipped fractions for profile "+ profile +" due to validation error";
