@@ -98,10 +98,9 @@ To start/stop the app in Docker:
       docker stop etpa-mysql-1
       docker stop etpa-etpa-1
 
-The main endpoints:
-  http://localhost:9999/etpa/fractions
-  http://localhost:9999/etpa/metrereadings
-  http://localhost:9999/etpa/consumption/:month/:metre_id
+The main endpoints are on 9999 via Docker:
+  http://localhost:9999/etpa/fractions/:fractionId
+
 
 *******************************************************************************
 
