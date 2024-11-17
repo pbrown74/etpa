@@ -3,6 +3,7 @@ package com.etpa.electric.service;
 import com.etpa.electric.dto.*;
 import com.etpa.electric.entity.Fraction;
 import com.etpa.electric.exception.BadFileUploadException;
+import com.etpa.electric.exception.FractionNotFoundException;
 import com.etpa.electric.exception.ValidationException;
 import com.etpa.electric.repository.FractionRepository;
 import com.etpa.electric.utils.Errors;
@@ -80,9 +81,30 @@ public class FractionService {
         return new ResponseDTO(items, errors);
     }
 
+    public FractionDTO save(final FractionDTO fraction, final String id){
+        if(!fractionRepository.findById(id).isPresent()){
+            throw new FractionNotFoundException(id);
+        }
+        return buildFraction(fractionRepository.save(buildFraction(fraction, id)));
+    }
+
+    public FractionDTO save(final FractionDTO fraction){
+        return buildFraction(fractionRepository.save(buildFraction(fraction)));
+    }
+
     public void delete(final String fractionId) {
         this.fractionRepository.deleteById(fractionId);
         logger.debug("Deleted fraction: "+ fractionId);
+    }
+
+    public FractionDTO get(final String fractionId) {
+        Optional<Fraction> fraction = this.fractionRepository.findById(fractionId);
+        if(fraction.isPresent()){
+            return buildFraction(fraction.get());
+        }
+        else{
+            throw new FractionNotFoundException(fractionId);
+        }
     }
 
     private FractionDTO newLine(final String s)  {
@@ -115,6 +137,17 @@ public class FractionService {
 
     private Fraction buildFraction(final FractionDTO dto){
         Fraction f = new Fraction();
+        f.setFraction(dto.getFraction());
+        f.setMonth(dto.getMonth());
+        f.setProfile(dto.getProfile());
+        return f;
+    }
+
+    private Fraction buildFraction(final FractionDTO dto, final String id){
+        Fraction f = new Fraction();
+        if(id!=null){
+            f.setId(id);
+        }
         f.setFraction(dto.getFraction());
         f.setMonth(dto.getMonth());
         f.setProfile(dto.getProfile());

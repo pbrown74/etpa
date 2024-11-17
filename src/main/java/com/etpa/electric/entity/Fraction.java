@@ -23,6 +23,10 @@ public class Fraction {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getProfile() {
         return profile;
     }
@@ -37,6 +41,7 @@ public class Fraction {
 
     public void setMonth(Month month) {
         this.month = month;
+        this.monthCode = month.getCode();
     }
 
     public BigDecimal getFraction() {

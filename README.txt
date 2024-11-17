@@ -73,14 +73,10 @@ files except target binaries (caveat - the jar is included). The main
 SpringBOOT entry point is called ElectricApplication. Usually i run
 everything inside Docker unless im debugging.
 
-I implemented the CRUD methods mentioned in the spec but I did not implement
-all the standard CRUD endpoints for Fractions and Readings because
-i did not have time to think through handling these with CSV files or as single
-entities. For example, should a Fraction Delete be allowed on a per Fraction
-basis? Would it not invalidate the Fraction group it belongs to and any Reading
-that was generated using that Fraction? Should we handle fraction Delete based
-on a CSV file similar to Insert? I have stubbed out the methods with "Not Yet
-Implemented" exceptions.
+I implemented the CRUD methods mentioned in the spec and some standard ones.
+The standard ones allow the fractions to end up in an invalid state- this needs
+more thought. If you remove one fraction, the others within the same profile
+are invalid. I don't deal with that issue.
 
 *******************************************************************************
 
@@ -151,9 +147,9 @@ You should not have to edit anything to get it running locally on port 9999.
 
 6) TODO
 
-I should use the business key from the Fraction file (month, profile) as the
-primary key for doing insert/update/delete. The same concept applies to the
-Metre Reading file, the business key is (metreId,month,profile). The foreign
+I should perhaps use the business key from the Fraction file (month, profile)
+as the primary key for doing insert/update/delete. The same concept applies to
+the Metre Reading file, the business key is (metreId,month,profile).The foreign
 key from MetreReading to Fraction could be (month,profile), although i'm not
 sure that is desirable.
 

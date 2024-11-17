@@ -37,13 +37,41 @@ public class ConsumptionService {
         logger.debug("Deleted consumption: "+ consumptionId);
     }
 
+    public ConsumptionDTO save(final ConsumptionDTO consumption){
+        return buildConsumption(consumptionRepository.save(buildConsumption(consumption)));
+    }
+
+    public ConsumptionDTO save(final ConsumptionDTO consumption, final String id){
+        if(!consumptionRepository.findById(id).isPresent()){
+            throw new ConsumptionNotFoundException(id);
+        }
+        return buildConsumption(consumptionRepository.save(buildConsumption(consumption, id)));
+    }
+
     private ConsumptionDTO buildConsumption(final Consumption c){
-        ConsumptionDTO dto = new ConsumptionDTO(c.getId(),
+        ConsumptionDTO dto = new ConsumptionDTO(
+                c.getId(),
                 c.getMetreId(),
                 c.getMonth().name(),
                 c.getProfile(),
                 c.getConsumption());
         return dto;
+    }
+
+    private Consumption buildConsumption(final ConsumptionDTO dto){
+        return buildConsumption(dto, null);
+    }
+
+    private Consumption buildConsumption(final ConsumptionDTO dto, final String id){
+        Consumption c = new Consumption();
+        if(id!=null){
+            c.setId(id);
+        }
+        c.setMetreId(dto.getMetreId());
+        c.setMonth(dto.getMonth());
+        c.setProfile(dto.getProfile());
+        c.setConsumption(dto.getConsumption());
+        return c;
     }
 
 }

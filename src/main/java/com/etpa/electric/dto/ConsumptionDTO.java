@@ -58,7 +58,7 @@ public class ConsumptionDTO {
 
     @JsonProperty("month")
     public Month getMonth() {
-        return Month.valueOf(month);
+        return Month.from(month);
     }
 
     @JsonProperty("consumption")

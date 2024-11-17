@@ -5,6 +5,8 @@ import com.etpa.electric.entity.Consumption;
 import com.etpa.electric.entity.Fraction;
 import com.etpa.electric.entity.MetreReading;
 import com.etpa.electric.exception.BadFileUploadException;
+import com.etpa.electric.exception.FractionNotFoundException;
+import com.etpa.electric.exception.MetreReadingNotFoundException;
 import com.etpa.electric.exception.ValidationException;
 import com.etpa.electric.repository.ConsumptionRepository;
 import com.etpa.electric.repository.FractionRepository;
@@ -101,9 +103,26 @@ public class MetreReadingService {
         return new ResponseDTO(items, errors);
     }
 
+    public MetreReadingDTO save(final MetreReadingDTO reading, final String id){
+        if(!metreReadingRepository.findById(id).isPresent()){
+            throw new FractionNotFoundException(id);
+        }
+        return buildMetreReading(metreReadingRepository.save(buildMetreReading(reading, id)));
+    }
+
     public void delete(final String metreReadingId) {
         this.metreReadingRepository.deleteById(metreReadingId);
         logger.debug("Deleted metre reading: "+ metreReadingId);
+    }
+
+    public MetreReadingDTO get(final String metreReadingId) {
+        Optional<MetreReading> reading = this.metreReadingRepository.findById(metreReadingId);
+        if(reading.isPresent()){
+            return buildMetreReading(reading.get());
+        }
+        else{
+            throw new MetreReadingNotFoundException(metreReadingId);
+        }
     }
 
     private ConsumptionDTO calculateConsumption(final MetreReadingDTO currReading, final List<MetreReadingDTO> readingsPerMetre){
@@ -210,6 +229,18 @@ public class MetreReadingService {
                                 " of total consumption: "+ totalConsumption.get());
             }
         }
+    }
+
+    private MetreReading buildMetreReading(final MetreReadingDTO dto, final String id){
+        MetreReading mr = new MetreReading();
+        if(id!=null){
+            mr.setId(id);
+        }
+        mr.setMetreReading(dto.getMetreReading());
+        mr.setMetreId(dto.getMetreId());
+        mr.setMonth(dto.getMonth());
+        mr.setProfile(dto.getProfile());
+        return mr;
     }
 
     private MetreReading buildMetreReading(final MetreReadingDTO dto){

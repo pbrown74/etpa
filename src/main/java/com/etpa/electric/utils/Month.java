@@ -22,6 +22,15 @@ public enum Month {
         throw new IllegalArgumentException("Month has no matching constant for " + i);
     }
 
+    public static Month from(String s){
+        for (Month m : values()){
+            if (m.name().equals(s)){
+                return m;
+            }
+        }
+        throw new IllegalArgumentException("No matching constant for " + s);
+    }
+
     public static Month prev(Month m){
         if(m.getCode()==1){
             throw new IllegalArgumentException("No Month before: "+

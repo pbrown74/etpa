@@ -31,6 +31,20 @@ class GlobalControllerExceptionHandler {
         return new ResponseEntity<>(ex.getConsumptionKey(), HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(FractionNotFoundException.class)
+    public ResponseEntity<String> handleFractionNotFoundException(FractionNotFoundException ex) {
+        logger.error("No Fraction found for id: "+ ex.getKey());
+        return new ResponseEntity<>(ex.getKey(), HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MetreReadingNotFoundException.class)
+    public ResponseEntity<String> handleMetreReadingNotFoundException(MetreReadingNotFoundException ex) {
+        logger.error("No Reading found for id: "+ ex.getKey());
+        return new ResponseEntity<>(ex.getKey(), HttpStatus.NOT_FOUND);
+    }
+
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     @ExceptionHandler(NotYetImplementedException.class)
     public ResponseEntity<String> handleNotYetImplementedException(NotYetImplementedException ex) {

@@ -2,13 +2,13 @@ package com.etpa.electric.controller;
 
 import com.etpa.electric.dto.FractionDTO;
 import com.etpa.electric.dto.ResponseDTO;
-import com.etpa.electric.exception.NotYetImplementedException;
 import com.etpa.electric.service.FractionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 /**
  * only the file upload endpoint was implemented because it is unclear whether the other
@@ -56,7 +56,7 @@ public class FractionController {
     }
 
     /**
-     * not yet implemented
+     * get a fraction by ID
      * @param fractionId
      * @return
      */
@@ -65,13 +65,12 @@ public class FractionController {
             method = RequestMethod.GET,
             produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody FractionDTO get(@PathVariable("fraction_id") String fractionId) {
-        throw new NotYetImplementedException("get");
+        return fractionService.get(fractionId);
     }
 
     /**
-     * not yet implemented
-     * @param fractionnId
-     * @param fraction
+     * update a fraction
+     * @param fractionId
      * @return
      */
     @RequestMapping(
@@ -79,9 +78,9 @@ public class FractionController {
             method = RequestMethod.PUT,
             produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody FractionDTO update(
-            @PathVariable("fraction_id") String fractionnId,
+            @PathVariable("fraction_id") String fractionId,
             @RequestBody @Valid FractionDTO fraction) {
-        throw new NotYetImplementedException("update");
+        return fractionService.save(fraction, fractionId);
     }
 
 }

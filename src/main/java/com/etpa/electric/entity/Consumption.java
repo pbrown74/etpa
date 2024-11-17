@@ -27,6 +27,10 @@ public class Consumption {
         return id;
     }
 
+    public void setId(String id) {
+        this.id =id;
+    }
+
     public String getMetreId() {
         return metreId;
     }
@@ -49,6 +53,7 @@ public class Consumption {
 
     public void setMonth(Month month) {
         this.month = month;
+        this.monthCode = month.getCode();
     }
 
     public BigDecimal getConsumption() {

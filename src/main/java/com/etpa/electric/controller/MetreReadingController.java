@@ -49,7 +49,7 @@ public class MetreReadingController {
     }
 
     /**
-     * not yet imnplemented
+     * get a reading by ID
      * @param metreReadingId
      * @return
      */
@@ -58,11 +58,11 @@ public class MetreReadingController {
             method = RequestMethod.GET,
             produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody MetreReadingDTO get(@PathVariable("metre_reading_id") String metreReadingId) {
-        throw new NotYetImplementedException("get");
+        return metreReadingService.get(metreReadingId);
     }
 
     /**
-     * not yet implemented
+     * update a meter reading by ID
      * @param metreReadingId
      * @param metreReading
      * @return
@@ -74,7 +74,7 @@ public class MetreReadingController {
     public @ResponseBody MetreReadingDTO update(
             @PathVariable("metre_reading_id") String metreReadingId,
             @RequestBody @Valid MetreReadingDTO metreReading) {
-        throw new NotYetImplementedException("update");
+        return metreReadingService.save(metreReading, metreReadingId);
     }
 
 }

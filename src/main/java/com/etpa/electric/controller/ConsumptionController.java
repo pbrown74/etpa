@@ -53,7 +53,7 @@ public class ConsumptionController {
     }
 
     /**
-     * not implemented, here for completeness only
+     * save a consumption
      * @param consumption
      * @return
      */
@@ -62,11 +62,11 @@ public class ConsumptionController {
             method = RequestMethod.POST,
             produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ConsumptionDTO save(@RequestBody @Valid ConsumptionDTO consumption) {
-        throw new NotYetImplementedException("save");
+        return consumptionService.save(consumption);
     }
 
     /**
-     * not implemented, here for completeness only
+     * update a consumption
      * @param consumptionId
      * @param consumption
      * @return
@@ -78,7 +78,7 @@ public class ConsumptionController {
     public @ResponseBody ConsumptionDTO update(
             @PathVariable("consumption_id") String consumptionId,
             @RequestBody @Valid ConsumptionDTO consumption) {
-        throw new NotYetImplementedException("update");
+        return consumptionService.save(consumption, consumptionId);
     }
 
 }
