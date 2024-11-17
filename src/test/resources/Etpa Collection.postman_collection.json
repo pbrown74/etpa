@@ -68,6 +68,89 @@
 			"response": []
 		},
 		{
+			"name": "Insert Consumption",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"metre_id\": \"0001\",\r\n            \"profile\": \"A\",\r\n            \"month\": \"DEC\",\r\n            \"consumption\": 1.00\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/consumption",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"consumption"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Select fraction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9999/etpa/fractions/:fractionId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"fractions",
+						":fractionId"
+					],
+					"variable": [
+						{
+							"key": "fractionId",
+							"value": "477094bd-c1c5-4a02-93d0-5b9190cc8ad8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Select Reading",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9999/etpa/metrereadings/:metreReadingId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"metrereadings",
+						":metreReadingId"
+					],
+					"variable": [
+						{
+							"key": "metreReadingId",
+							"value": "de505b5d-7195-4839-b40d-3d220264a68b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Select Consumption",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -113,13 +196,13 @@
 			"response": []
 		},
 		{
-			"name": "Insert Consumption",
+			"name": "Update Consumption",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n            \"metre_id\": \"0001\",\r\n            \"profile\": \"A\",\r\n            \"month\": \"DEC\",\r\n            \"consumption\": 1.00\r\n}\r\n",
+					"raw": "{\r\n            \"metre_id\": \"0001\",\r\n            \"profile\": \"A\",\r\n            \"month\": \"DEC\",\r\n            \"consumption\": 3.00\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -127,7 +210,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9999/etpa/consumption",
+					"raw": "http://localhost:9999/etpa/consumption/:consumptionId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -135,7 +218,14 @@
 					"port": "9999",
 					"path": [
 						"etpa",
-						"consumption"
+						"consumption",
+						":consumptionId"
+					],
+					"variable": [
+						{
+							"key": "consumptionId",
+							"value": "93db9ff0-86a2-4e0d-a237-e6698266ce06"
+						}
 					]
 				}
 			},
@@ -148,7 +238,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"eb5728d0-5e82-4308-8c80-47e665ceaf7f\",\r\n    \"month\": \"JAN\",\r\n    \"profile\": \"A\",\r\n    \"fraction\": 0.3225\r\n}\r\n",
+					"raw": "{\r\n    \"month\": \"JAN\",\r\n    \"profile\": \"A\",\r\n    \"fraction\": 0.35,\r\n    \"id\": \"477094bd-c1c5-4a02-93d0-5b9190cc8ad8\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -156,7 +246,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9999/etpa/fractions/:fraction",
+					"raw": "http://localhost:9999/etpa/fractions/:fractionId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -165,12 +255,12 @@
 					"path": [
 						"etpa",
 						"fractions",
-						":fraction"
+						":fractionId"
 					],
 					"variable": [
 						{
-							"key": "fraction",
-							"value": "eb5728d0-5e82-4308-8c80-47e665ceaf7f"
+							"key": "fractionId",
+							"value": "477094bd-c1c5-4a02-93d0-5b9190cc8ad8"
 						}
 					]
 				}
@@ -184,7 +274,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"metre_id\": \"0004\",\r\n    \"profile\": \"B\",\r\n    \"month\": \"JAN\",\r\n    \"metre_reading\": 8.0\r\n}",
+					"raw": "{\r\n    \"metre_id\": \"0004\",\r\n    \"profile\": \"B\",\r\n    \"month\": \"JAN\",\r\n    \"metre_reading\": 8.05,\r\n    \"id\": \"de505b5d-7195-4839-b40d-3d220264a68b\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -192,7 +282,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:9999/etpa/metrereadings/:metrereading",
+					"raw": "http://localhost:9999/etpa/metrereadings/:metreReadingId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -201,12 +291,120 @@
 					"path": [
 						"etpa",
 						"metrereadings",
-						":metrereading"
+						":metreReadingId"
 					],
 					"variable": [
 						{
-							"key": "metrereading",
-							"value": "25b88393-704e-4a6c-a4f5-9e0f703d5c60"
+							"key": "metreReadingId",
+							"value": "de505b5d-7195-4839-b40d-3d220264a68b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Consumption",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/consumption/:consumptionId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"consumption",
+						":consumptionId"
+					],
+					"variable": [
+						{
+							"key": "consumptionId",
+							"value": "93db9ff0-86a2-4e0d-a237-e6698266ce06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Fraction",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/fractions/:fractionId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"fractions",
+						":fractionId"
+					],
+					"variable": [
+						{
+							"key": "fractionId",
+							"value": "477094bd-c1c5-4a02-93d0-5b9190cc8ad8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Metre Reading",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9999/etpa/metrereadings/:metreReadingId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						"etpa",
+						"metrereadings",
+						":metreReadingId"
+					],
+					"variable": [
+						{
+							"key": "metreReadingId",
+							"value": "de505b5d-7195-4839-b40d-3d220264a68b"
 						}
 					]
 				}

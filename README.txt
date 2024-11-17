@@ -69,8 +69,8 @@ Standard SpringBOOT package structure has been used..
 I did not attempt the AXON implementation.
 
 I used Java 17 to build the app, in Intellij. I commited all the project
-files except target binaries (caveat - the jar is included). The main
-SpringBOOT entry point is called ElectricApplication. Usually i run
+files except target binaries. The main class in the project is the
+SpringBOOT entry point called ElectricApplication. Usually i run
 everything inside Docker unless im debugging.
 
 I implemented the CRUD methods mentioned in the spec and some standard ones.
