@@ -5,7 +5,6 @@ import com.etpa.electric.entity.Consumption;
 import com.etpa.electric.entity.Fraction;
 import com.etpa.electric.entity.MetreReading;
 import com.etpa.electric.exception.BadFileUploadException;
-import com.etpa.electric.exception.FractionNotFoundException;
 import com.etpa.electric.exception.MetreReadingNotFoundException;
 import com.etpa.electric.exception.ValidationException;
 import com.etpa.electric.repository.ConsumptionRepository;
@@ -105,7 +104,7 @@ public class MetreReadingService {
 
     public MetreReadingDTO save(final MetreReadingDTO reading, final String id){
         if(!metreReadingRepository.findById(id).isPresent()){
-            throw new FractionNotFoundException(id);
+            throw new MetreReadingNotFoundException(id);
         }
         return buildMetreReading(metreReadingRepository.save(buildMetreReading(reading, id)));
     }
