@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * only the file upload endpoint was implemented. it is unclear to me what the semantics
- * of the other endpoints would be, should they also be file based or entity level like
- * traditional CRUD endpoints?
+ * partial implementation of CRUD endpoints, update/delete using the file
+ * was not considered due to time constraints.
  */
 @RestController
 @RequestMapping(path="/etpa")

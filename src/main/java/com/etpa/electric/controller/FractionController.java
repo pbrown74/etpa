@@ -9,14 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 /**
- * only the file upload endpoint was implemented because it is unclear whether the other
- * endpoints should be file based or done on the entity level. if entity level then there
- * are plenty more validations to think about regarding leaving a group of fractions in an
- * invalid state. And also, should a fraction be allowed to be updated if there is a metre
- * reading that was generated off it? perhaps MetreReading needs a foreign key into Fraction,
- * plenty more to think about if the extra endpoints are attempted.
+ * partial implementation of CRUD endpoints, update/delete using the file
+ * was not considered due to time constraints.
  */
 @RestController
 @RequestMapping(path="/etpa")

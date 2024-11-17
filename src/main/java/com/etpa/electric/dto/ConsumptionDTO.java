@@ -9,9 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 /**
- * the annotations used here would be useful if we had implement all the CRUD methods on the controller
- * at the entity level rather than at file level, then these annotations are used to do validation early
- * on, before the service layer is reached.
+ * the annotations are for validations at the entity level rather than at file level,we
+ * fail fast on the REST endpoint where we can
  */
 public class ConsumptionDTO {
 
