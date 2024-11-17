@@ -21,6 +21,11 @@ public class MetreReadingController {
     @Autowired
     private MetreReadingService metreReadingService;
 
+    /**
+     * insert the metre readings
+     * @param metreReadingsCsv
+     * @return
+     */
     @RequestMapping(
             path= "/metrereadings",
             method = RequestMethod.POST,
@@ -30,6 +35,24 @@ public class MetreReadingController {
         return metreReadingService.save(metreReadingsCsv);
     }
 
+    /**
+     * delete by ID
+     * @param metreReadingId
+     */
+    @RequestMapping(
+            path= "/metrereadings/{metre_reading_id}",
+            method = RequestMethod.DELETE,
+            produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody void delete(
+            @PathVariable("metre_reading_id") String metreReadingId) {
+        metreReadingService.delete(metreReadingId);
+    }
+
+    /**
+     * not yet imnplemented
+     * @param metreReadingId
+     * @return
+     */
     @RequestMapping(
             path= "/metrereadings/{metre_reading_id}",
             method = RequestMethod.GET,
@@ -38,6 +61,12 @@ public class MetreReadingController {
         throw new NotYetImplementedException("get");
     }
 
+    /**
+     * not yet implemented
+     * @param metreReadingId
+     * @param metreReading
+     * @return
+     */
     @RequestMapping(
             path= "/metrereadings/{metre_reading_id}",
             method = RequestMethod.PUT,
@@ -46,15 +75,6 @@ public class MetreReadingController {
             @PathVariable("metre_reading_id") String metreReadingId,
             @RequestBody @Valid MetreReadingDTO metreReading) {
         throw new NotYetImplementedException("update");
-    }
-
-    @RequestMapping(
-            path= "/metrereadings/{metre_reading_id}",
-            method = RequestMethod.DELETE,
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody MetreReadingDTO delete(
-            @PathVariable("metre_reading_id") String metreReadingId) {
-        throw new NotYetImplementedException("delete");
     }
 
 }

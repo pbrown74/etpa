@@ -40,6 +40,19 @@ public class ConsumptionController {
     }
 
     /**
+     * delete by Id
+     * @param consumptionId
+     * @return
+     */
+    @RequestMapping(
+            path= "/consumption/{consumption_id}",
+            method = RequestMethod.DELETE)
+    public @ResponseBody void delete(
+            @PathVariable("consumption_id") String consumptionId) {
+        consumptionService.delete(consumptionId);
+    }
+
+    /**
      * not implemented, here for completeness only
      * @param consumption
      * @return
@@ -66,20 +79,6 @@ public class ConsumptionController {
             @PathVariable("consumption_id") String consumptionId,
             @RequestBody @Valid ConsumptionDTO consumption) {
         throw new NotYetImplementedException("update");
-    }
-
-    /**
-     * not implemented, here for completeness only
-     * @param consumptionId
-     * @return
-     */
-    @RequestMapping(
-            path= "/consumption/{consumption_id}",
-            method = RequestMethod.DELETE,
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ConsumptionDTO delete(
-            @PathVariable("consumption_id") String consumptionId) {
-        throw new NotYetImplementedException("delete");
     }
 
 }

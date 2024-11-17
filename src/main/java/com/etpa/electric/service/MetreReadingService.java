@@ -101,6 +101,11 @@ public class MetreReadingService {
         return new ResponseDTO(items, errors);
     }
 
+    public void delete(final String metreReadingId) {
+        this.metreReadingRepository.deleteById(metreReadingId);
+        logger.debug("Deleted metre reading: "+ metreReadingId);
+    }
+
     private ConsumptionDTO calculateConsumption(final MetreReadingDTO currReading, final List<MetreReadingDTO> readingsPerMetre){
         MetreReadingDTO prevReading = findPreviousReading(currReading, readingsPerMetre);
         BigDecimal consumption = currReading.getMetreReading().subtract(prevReading.getMetreReading());
@@ -181,20 +186,18 @@ public class MetreReadingService {
 
     private void validateConsumptionForMonth(final ConsumptionDTO consumption, final List<MetreReadingDTO> readingsPerMetre){
         // first check if there is a valid fraction for the month
-        List<Fraction> fractionsForProfile = this.fractionRepository.findByProfile(consumption.getProfile());
-        Optional<Fraction> fractionForConsumptionMonth = fractionsForProfile.stream().filter(f->f.getMonth()==consumption.getMonth()).findFirst();
-        if(fractionForConsumptionMonth.isEmpty()){
+        Optional<Fraction> fraction = this.fractionRepository.findByProfileAndMonthCode(consumption.getProfile(), consumption.getMonth().getCode());
+        if(!fraction.isPresent()){
             throw new ValidationException(Errors.INVALID_CONSUMPTION_FOR_MONTH,
                     "Consumption could not be calculated for metre: " + consumption.getMetreId() +
                             " and month: " + consumption.getMonth().name()+
                             " because of missing fraction definition for (profile="+consumption.getProfile()+
                             ",month="+consumption.getMonth().name()+")");
-        }
-        // the total consumption is the highest value, we know the last value is the highest due to previous validation
+        }        // the total consumption is the highest value, we know the last value is the highest due to previous validation
         Optional<BigDecimal> totalConsumption = readingsPerMetre.stream().map(rm->rm.getMetreReading()).max(BigDecimal::compareTo);
         if(totalConsumption.isPresent()){
             // check if the consumption is within tolerance
-            Fraction fractionForMonth = fractionForConsumptionMonth.get();
+            Fraction fractionForMonth = fraction.get();
             BigDecimal minCons = totalConsumption.get().multiply(fractionForMonth.getFraction()).multiply(BigDecimal.valueOf(0.75));
             BigDecimal maxCons = totalConsumption.get().multiply(fractionForMonth.getFraction()).multiply(BigDecimal.valueOf(1.25));
             BigDecimal cons = consumption.getConsumption();

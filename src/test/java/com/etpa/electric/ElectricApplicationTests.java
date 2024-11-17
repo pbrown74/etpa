@@ -45,6 +45,10 @@ class ElectricApplicationTests {
     private final static String GETConsumptionUrl = "http://localhost:${server.port}/etpa/consumption/{month}/{metreId}";
     private final static String POSTFractionsUrl = "http://localhost:${server.port}/etpa/fractions";
     private final static String POSTReadingsUrl = "http://localhost:${server.port}/etpa/metrereadings";
+    private final static String DELETEFractionsUrl = "http://localhost:${server.port}/etpa/fractions/{fractionId}";
+    private final static String DELETEReadingsUrl = "http://localhost:${server.port}/etpa/metrereadings/{metreReadingId}";
+    private final static String DELETEConsumptionUrl = "http://localhost:${server.port}/etpa/consumption/{consumptionId}";
+
     @Value("${server.port}")
     private String serverPort;
 
@@ -97,6 +101,8 @@ class ElectricApplicationTests {
         ConsumptionDTO consumption = doGET(GETConsumptionUrl, ConsumptionDTO.class, params);
         // check consumption value is 1.0, as per the test data
         assertTrue(consumption.getConsumption().compareTo(BigDecimal.ONE)==0);
+        // cleanup after test
+        cleanup(fractions, readings);
     }
 
     /**
@@ -115,6 +121,8 @@ class ElectricApplicationTests {
         assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.FRACTIONS_DONT_SUM_TO_ONE);
+        // cleanup after test
+        cleanup(fractions);
     }
 
     /**
@@ -141,16 +149,20 @@ class ElectricApplicationTests {
     public void insert_Readings_outside_Tolerance_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test4_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
-        List<FractionDTO> fractions = response.getItems();
-        assertTrue(fractions.size()==24);
+        Object[] items = response.getItems().toArray(new Object[]{});
+        FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
+        assertTrue(fractions.length==24);
         body = loadBody("test4_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
-        List<MetreReadingDTO> readings = response.getItems();
-        assertTrue(readings.size()==12);
+        items = response.getItems().toArray(new Object[]{});
+        MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
+        assertTrue(readings.length==12);
         List<ErrorDTO> errors = response.getErrors();
         assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
+        // cleanup after test
+        cleanup(fractions, readings);
     }
 
     /**
@@ -162,16 +174,20 @@ class ElectricApplicationTests {
     public void insert_Readings_for_nonexistant_FractionProfile_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test5_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
-        List<FractionDTO> fractions = response.getItems();
-        assertTrue(fractions.size()==24);
+        Object[] items = response.getItems().toArray(new Object[]{});
+        FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
+        assertTrue(fractions.length==24);
         body = loadBody("test5_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
-        List<MetreReadingDTO> readings = response.getItems();
-        assertTrue(readings.size()==0);
+        items = response.getItems().toArray(new Object[]{});
+        MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
+        assertTrue(readings.length==0);
         List<ErrorDTO> errors = response.getErrors();
         assertTrue(errors.size()==1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.PROFILE_NONEXISTANT);
+        // cleanup after test
+        cleanup(fractions, readings);
     }
 
     /**
@@ -184,16 +200,20 @@ class ElectricApplicationTests {
     public void insert_Readings_out_of_order_Then_Check_Errors() {
         MultiValueMap<String, Object> body = loadBody("test6_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
-        List<FractionDTO> fractions = response.getItems();
-        assertTrue(fractions.size() == 24);
+        Object[] items = response.getItems().toArray(new Object[]{});
+        FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
+        assertTrue(fractions.length == 24);
         body = loadBody("test6_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
-        List<MetreReadingDTO> readingItems = response.getItems();
-        assertTrue(readingItems.size() == 12);
+        items = response.getItems().toArray(new Object[]{});
+        MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
+        assertTrue(readings.length == 12);
         List<ErrorDTO> errors = response.getErrors();
         assertTrue(errors.size() == 1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.FILE_MONTHS_DECREMENT_FOR_METRE);
+        // cleanup after test
+        cleanup(fractions, readings);
     }
 
     /**
@@ -206,18 +226,21 @@ class ElectricApplicationTests {
     public void insert_Three_Readings_whith_one_faulty_Then_Check_Two_Metres_Saved() {
         MultiValueMap<String, Object> body = loadBody("test7_fractions.csv");
         ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
-        List<FractionDTO> fractions = response.getItems();
-        assertTrue(fractions.size() == 24);
+        Object[] items = response.getItems().toArray(new Object[]{});
+        FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
+        assertTrue(fractions.length == 24);
         body = loadBody("test7_readings.csv");
         response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
-        Object[] items = response.getItems().toArray(new Object[]{});
-        MetreReadingDTO[] readingItems = objectMapper.convertValue(items, MetreReadingDTO[].class);
-        assertTrue(readingItems.length == 24);
-        Arrays.asList(readingItems).stream().forEach(r->assertTrue(!r.getMetreId().equals("0004")));
+        items = response.getItems().toArray(new Object[]{});
+        MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
+        assertTrue(readings.length == 24);
+        Arrays.asList(readings).stream().forEach(r->assertTrue(!r.getMetreId().equals("0004")));
         List<ErrorDTO> errors = response.getErrors();
         assertTrue(errors.size() == 1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
+        // cleanup after test
+        cleanup(fractions, readings);
     }
 
     /**
@@ -229,6 +252,10 @@ class ElectricApplicationTests {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", fractions);
         return body;
+    }
+
+    private void doDELETE(String url, Map<String, String> urlParams) {
+        restTemplate.delete(expandPort(url), urlParams);
     }
 
     private <Output> Output doPOST(String url, MultiValueMap<String, Object> body, Class<Output> clazz) {
@@ -282,6 +309,28 @@ class ElectricApplicationTests {
             }
         }
         return Optional.empty();
+    }
+
+    private void cleanup(FractionDTO[] fractions){
+        cleanup(fractions, null);
+    }
+
+    private void cleanup(FractionDTO[] fractions, MetreReadingDTO[] readings){
+        // cleanup the database in a quick way without taking it down completely between tests
+        if(readings!=null){
+            Arrays.asList(readings).stream().forEach(r->{
+                // load the consumption created for the reading and delete it by ID
+                Map<String, String> p = new HashMap<>();
+                p.put("metreId", r.getMetreId());
+                p.put("month", r.getMonth().name());
+                ConsumptionDTO c = doGET(GETConsumptionUrl, ConsumptionDTO.class, p);
+                doDELETE(DELETEConsumptionUrl, Collections.singletonMap("consumptionId", c.getId()));
+                // remove the readings
+                doDELETE(DELETEReadingsUrl, Collections.singletonMap("metreReadingId", r.getId()));
+            });
+        }
+        // remove the fractions
+        Arrays.asList(fractions).stream().forEach(f->doDELETE(DELETEFractionsUrl, Collections.singletonMap("fractionId", f.getId())));
     }
 
 }

@@ -93,11 +93,14 @@ To build the app:
   ./mvnw clean install
   ./mvnw clean install -DskipTests
 
-To run the app in Docker:
+To start/stop the app in Docker:
       docker build -t etpa-0.0.1 .
       docker compose up
           -- now the service is running on localhost:9999 and you can use
           postman test cases (included in resources/) or use Swagger to test
+
+      docker stop etpa-mysql-1
+      docker stop etpa-etpa-1
 
 The main endpoints:
   http://localhost:9999/etpa/fractions

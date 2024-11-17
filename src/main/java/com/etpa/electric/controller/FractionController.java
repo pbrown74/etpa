@@ -42,7 +42,21 @@ public class FractionController {
     }
 
     /**
-     * note yet implemented
+     * delete by ID
+     * @param fractionId
+     * @return
+     */
+    @RequestMapping(
+            path= "/fractions/{fraction_id}",
+            method = RequestMethod.DELETE,
+            produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody void delete(
+            @PathVariable("fraction_id") String fractionId) {
+        fractionService.delete(fractionId);
+    }
+
+    /**
+     * not yet implemented
      * @param fractionId
      * @return
      */
@@ -68,20 +82,6 @@ public class FractionController {
             @PathVariable("fraction_id") String fractionnId,
             @RequestBody @Valid FractionDTO fraction) {
         throw new NotYetImplementedException("update");
-    }
-
-    /**
-     * not yet implemented
-     * @param fractionId
-     * @return
-     */
-    @RequestMapping(
-            path= "/fractions/{fraction_id}",
-            method = RequestMethod.DELETE,
-            produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody FractionDTO delete(
-            @PathVariable("fraction_id") String fractionId) {
-        throw new NotYetImplementedException("delete");
     }
 
 }

@@ -80,6 +80,11 @@ public class FractionService {
         return new ResponseDTO(items, errors);
     }
 
+    public void delete(final String fractionId) {
+        this.fractionRepository.deleteById(fractionId);
+        logger.debug("Deleted fraction: "+ fractionId);
+    }
+
     private FractionDTO newLine(final String s)  {
         StringTokenizer st = new StringTokenizer(s, ",");
         String month = st.nextToken();

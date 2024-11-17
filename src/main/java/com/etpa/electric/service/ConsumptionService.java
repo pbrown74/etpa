@@ -32,6 +32,11 @@ public class ConsumptionService {
         }
     }
 
+    public void delete(final String consumptionId){
+        consumptionRepository.deleteById(consumptionId);
+        logger.debug("Deleted consumption: "+ consumptionId);
+    }
+
     private ConsumptionDTO buildConsumption(final Consumption c){
         ConsumptionDTO dto = new ConsumptionDTO(c.getId(),
                 c.getMetreId(),
