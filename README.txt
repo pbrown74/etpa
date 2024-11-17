@@ -98,7 +98,7 @@ To start/stop the app in Docker:
       docker stop etpa-mysql-1
       docker stop etpa-etpa-1
 
-The main endpoints are on 9999 via Docker:
+The endpoints are on 9999 via Docker:
   http://localhost:9999/etpa/fractions/:fractionId
 
 
