@@ -180,15 +180,19 @@ public class MetreReadingService {
      */
 
     private void validateReadingsIncrement(final List<MetreReadingDTO> readingsPerMetre){
-        List<BigDecimal> readings = readingsPerMetre.stream().map(rm->rm.getMetreReading()).collect(Collectors.toList());
-        List<BigDecimal> copy = new Vector<>(readings);
-        // if the sort asc list is the same as the unsorted list, the values were ascending.
-        // since its a small list this is acceptable. i might go for something more efficient
-        // if we are dealing with large upload files and this code is called a lot.
-        Collections.sort(readings);
-        if(!copy.equals(readings)){
-            throw new ValidationException(Errors.FILE_MONTHS_DECREMENT_FOR_METRE,
-                    "Metre readings must increment month to month");
+        List<MetreReadingDTO> copy = new Vector(readingsPerMetre);
+        // this will sort them by Month
+        Collections.sort(copy);
+        // now check each metre reading is lower than next one
+        MetreReadingDTO prev = copy.get(0);
+        for(int i=1;i<copy.size();i++){
+            MetreReadingDTO reading = copy.get(i);
+            if(reading.getMetreReading().doubleValue() < prev.getMetreReading().doubleValue()){
+                throw new ValidationException(Errors.FILE_MONTHS_DECREMENT_FOR_METRE,
+                        "Metre readings must increment month to month: "+
+                        reading.getMetreReading() + " is less than " + prev.getMetreReading());
+            }
+            prev = reading;
         }
     }
 

@@ -33,8 +33,7 @@ public enum Month {
 
     public static Month prev(Month m){
         if(m.getCode()==1){
-            throw new IllegalArgumentException("No Month before: "+
-                    Month.valueOf(m.getCode()));
+            return valueOf(12);
         }
         return valueOf(m.code-1);
     }

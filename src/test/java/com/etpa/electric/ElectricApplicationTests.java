@@ -192,7 +192,9 @@ class ElectricApplicationTests {
 
     /**
      * test6 readings are not in increasing order of metre reading value, check the error.
-     * this applies to only one profile, the other profile is good.
+     * this applies to only one profile, the other profile is good. MAR and APR are not in
+     * order of metre reading. In the readings file they are also in reverse month order,
+     * which should not matter.
      * @throws IOException
      */
     @Test
@@ -239,6 +241,34 @@ class ElectricApplicationTests {
         assertTrue(errors.size() == 1);
         ErrorDTO error = errors.get(0);
         assertTrue(error.getCode()==Errors.INVALID_CONSUMPTION_FOR_MONTH);
+        // cleanup after test
+        cleanup(fractions, readings);
+    }
+
+    /**
+     * a stated assumption is that the file rows are not in any particular order, here
+     * we assert that is handled ok.
+     */
+    @Test
+    @Order(8)
+    public void insert_Readings_Arent_Ordered_by_Month_Then_Check_Saved() {
+        MultiValueMap<String, Object> body = loadBody("test8_fractions.csv");
+        ResponseDTO response = doPOST(POSTFractionsUrl, body, ResponseDTO.class);
+        Object[] items = response.getItems().toArray(new Object[]{});
+        FractionDTO[] fractions = objectMapper.convertValue(items, FractionDTO[].class);
+        assertTrue(fractions.length == 12);
+        Optional<FractionDTO> firstFraction = findFraction(fractions, Month.JAN, "A");
+        assertTrue(firstFraction.isPresent());
+        assertTrue(firstFraction.get().getFraction().compareTo(BigDecimal.valueOf(0.3125))==0);
+        body = loadBody("test8_readings.csv");
+        response = doPOST(POSTReadingsUrl, body, ResponseDTO.class);
+        items = response.getItems().toArray(new Object[]{});
+        MetreReadingDTO[] readings = objectMapper.convertValue(items, MetreReadingDTO[].class);
+        assertTrue(readings.length == 12);
+        Optional<MetreReadingDTO> firstReading = findMetreReading(readings,"0001", Month.JAN);
+        assertTrue(firstReading.isPresent());
+        assertTrue(firstReading.get().getMetreReading().compareTo(BigDecimal.valueOf(10))==0);
+        assertTrue(firstReading.get().getProfile().equals("A"));
         // cleanup after test
         cleanup(fractions, readings);
     }
