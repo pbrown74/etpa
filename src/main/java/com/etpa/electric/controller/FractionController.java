@@ -2,7 +2,7 @@ package com.etpa.electric.controller;
 
 import com.etpa.electric.dto.FractionDTO;
 import com.etpa.electric.dto.ResponseDTO;
-import com.etpa.electric.service.FractionService;
+import com.etpa.electric.service.fractions.FractionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

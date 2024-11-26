@@ -1,4 +1,4 @@
-package com.etpa.electric.service;
+package com.etpa.electric.service.fractions;
 
 import com.etpa.electric.dto.*;
 import com.etpa.electric.entity.Fraction;
@@ -23,8 +23,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * a service layer for interacting with Fractions, validations are located here.
- * the design is to save as many as we can and report errors for the ones which failed.
+ * a service layer for managing Fractions. the design is to save as many as we can
+ * and report errors for the ones which failed.
  */
 @Service
 public class FractionService {

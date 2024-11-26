@@ -59,6 +59,9 @@ public class MetreReadingDTO implements Cloneable, Comparable<MetreReadingDTO> {
         this.metreReading = metreReading;
     }
 
+    public MetreReadingDTO(){
+    }
+
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -82,6 +85,26 @@ public class MetreReadingDTO implements Cloneable, Comparable<MetreReadingDTO> {
     @JsonProperty("metre_reading")
     public BigDecimal getMetreReading() {
         return metreReading;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMetreId(String metreId) {
+        this.metreId = metreId;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public void setMetreReading(BigDecimal metreReading) {
+        this.metreReading = metreReading;
     }
 
     public Object clone() throws CloneNotSupportedException {

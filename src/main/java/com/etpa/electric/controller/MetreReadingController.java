@@ -2,8 +2,7 @@ package com.etpa.electric.controller;
 
 import com.etpa.electric.dto.MetreReadingDTO;
 import com.etpa.electric.dto.ResponseDTO;
-import com.etpa.electric.exception.NotYetImplementedException;
-import com.etpa.electric.service.MetreReadingService;
+import com.etpa.electric.service.metre.MetreReadingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -73,7 +72,7 @@ public class MetreReadingController {
     public @ResponseBody MetreReadingDTO update(
             @PathVariable("metre_reading_id") String metreReadingId,
             @RequestBody @Valid MetreReadingDTO metreReading) {
-        return metreReadingService.save(metreReading, metreReadingId);
+        return metreReadingService.update(metreReading, metreReadingId);
     }
 
 }

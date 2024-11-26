@@ -1,8 +1,7 @@
 package com.etpa.electric.controller;
 
 import com.etpa.electric.dto.ConsumptionDTO;
-import com.etpa.electric.exception.NotYetImplementedException;
-import com.etpa.electric.service.ConsumptionService;
+import com.etpa.electric.service.consumption.ConsumptionService;
 import com.etpa.electric.utils.Month;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

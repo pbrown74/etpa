@@ -1,4 +1,4 @@
-package com.etpa.electric.service;
+package com.etpa.electric.service.consumption;
 
 import com.etpa.electric.dto.ConsumptionDTO;
 import com.etpa.electric.entity.Consumption;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * a service layer for interacting with consumptions
+ * a service layer for managing consumptions
  */
 @Service
 public class ConsumptionService {
