@@ -158,7 +158,10 @@ PUT would use the business key to lookup the fraction to modify. DELETE
 would use the business key of the row to know which row to delete from
 the database.
 
-
+Add mocking based unit test for the new class ToleranceBasedConsumptionValidator
+Refactor the FractionService similarly to what is done in MetreReadingService
+Refactor MetreCSVReader to make it generic, and put it into FractionService
+Replace custom CSV code with Apache Commons CSV
 
 Paul Brown
 November 2024
