@@ -44,9 +44,12 @@ public class MetreReadingSaver {
             logger.debug("Saved "+savedReadings.size()+" metre readings") ;
             logger.debug("Saved "+savedConsumptions.size()+" consumptions") ;
         }
+        return savedReadings;
+    }
+
+    public void clear(){
         toSaveReadings.clear();
         toSaveCons.clear();
-        return savedReadings;
     }
 
     private Consumption buildConsumption(final ConsumptionDTO dto){

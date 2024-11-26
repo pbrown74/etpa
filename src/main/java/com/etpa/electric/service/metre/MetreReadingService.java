@@ -63,6 +63,7 @@ public class MetreReadingService implements IMetreReadingService {
             // per metre, we look at the set of readings
             groupedReadingsPerMetreId.forEach((metreId, readingsPerMetre) -> {
                 try{
+                    saver.clear();
                     readingsValidators.forEach(v->v.validateMetreReadings(readingsPerMetre));
                     readingsPerMetre.stream().forEach(reading->{
                         // if data for any metre reading fails validation then we skip that metre
